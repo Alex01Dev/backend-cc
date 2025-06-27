@@ -14,31 +14,31 @@ def get_db():
     finally:
         db.close()
 
-@product_router.post("/", response_model=Product)
+@product_router.post("/create", response_model=Product)
 def create(product: ProductCreate, db: Session = Depends(get_db)):
-    return product_controller.create_product(db, product)
+    return productController.create_product(db, product)
 
-@product_router.get("/", response_model=list[Product])
+@product_router.get("/get", response_model=list[Product])
 def read_all(db: Session = Depends(get_db)):
-    return product_controller.get_products(db)
+    return productController.get_products(db)
 
 @product_router.get("/{product_id}", response_model=Product)
 def read_one(product_id: int, db: Session = Depends(get_db)):
-    db_product = product_controller.get_product(db, product_id)
+    db_product = productController.get_product(db, product_id)
     if db_product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @product_router.put("/{product_id}", response_model=Product)
 def update(product_id: int, updates: ProductCreate, db: Session = Depends(get_db)):
-    updated = product_controller.update_product(db, product_id, updates)
+    updated = productController.update_product(db, product_id, updates)
     if updated is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return updated
 
 @product_router.delete("/{product_id}")
 def delete(product_id: int, db: Session = Depends(get_db)):
-    deleted = product_controller.delete_product(db, product_id)
+    deleted = productController.delete_product(db, product_id)
     if deleted is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Deleted successfully"}
