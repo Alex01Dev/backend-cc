@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from routes.productsRoutes import product_router
+from routes.usersRoutes import user
+from fastapi.middleware.cors import CORSMiddleware
 from config.db import Base, engine
 
 # Crear las tablas si no existen
@@ -13,3 +15,4 @@ app = FastAPI(
 
 # Registrar rutas
 app.include_router(product_router)
+app.include_router(user)
