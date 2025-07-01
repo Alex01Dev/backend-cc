@@ -3,6 +3,7 @@ from routes.productsRoutes import product_router
 from routes.usersRoutes import user
 from fastapi.middleware.cors import CORSMiddleware
 from config.db import Base, engine
+from routes.recommendationRoutes import recomendacion
 
 # Crear las tablas si no existen
 Base.metadata.create_all(bind=engine)
@@ -16,3 +17,4 @@ app = FastAPI(
 # Registrar rutas
 app.include_router(product_router)
 app.include_router(user)
+app.include_router(recomendacion)
