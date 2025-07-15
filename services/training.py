@@ -13,7 +13,6 @@ def entrenar_recomendaciones(db: Session, user_id: int):
 
     # 2. Obtener productos con los que ha interactuado
     productos_ids = [i.product_id for i in interacciones]
-    productos_vistos = db.query(Product).filter(Product.id.in_(productos_ids)).all()
 
     # 3. Obtener todos los productos (para recomendar los no vistos)
     todos_productos = db.query(Product).all()
@@ -42,9 +41,19 @@ def entrenar_recomendaciones(db: Session, user_id: int):
     similarity_scores = cosine_similarity(tfidf_matrix[vistos_idx], tfidf_matrix)
     avg_scores = similarity_scores.mean(axis=0)
 
-    # 8. Excluir productos ya vistos y ordenar
-    df["score"] = avg_scores
+    # 8. Normalizar huella de carbono (invirtiendo para que menor sea mejor)
+    max_footprint = df["carbon_footprint"].max()
+    min_footprint = df["carbon_footprint"].min()
+    df["carbon_score"] = 1 - (df["carbon_footprint"] - min_footprint) / (max_footprint - min_footprint + 1e-6)
+
+    # 9. Calcular score de sustentabilidad como promedio de carbon_score, recyclable_packaging y local_origin
+    df["sustentabilidad_score"] = (df["carbon_score"] + df["recyclable_packaging"] + df["local_origin"]) / 3
+
+    # 10. Combinar similitud con sustentabilidad (ajusta pesos si quieres)
+    df["score"] = 0.7 * avg_scores + 0.3 * df["sustentabilidad_score"]
+
+    # 11. Excluir productos ya vistos y ordenar por score descendente
     recomendados = df[~df["id"].isin(productos_ids)].sort_values("score", ascending=False)
 
-    # 9. Retornar los mejores N productos recomendados
+    # 12. Retornar los mejores N productos recomendados
     return recomendados[["id", "name", "category", "score"]].head(5).to_dict(orient="records")
