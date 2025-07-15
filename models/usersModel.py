@@ -1,15 +1,14 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, DateTime, Enum
 from datetime import datetime
 from config.db import Base
 
-class Usuario(Base):
-    __tablename__ = "tbb_usuarios"
+class User(Base):
+    __tablename__ = "tbb_users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True, comment='ID único del usuario')
-    nombre_usuario = Column(String(60), nullable=False, comment='Nombre del usuario')
-    correo_electronico = Column(String(100), nullable=False, comment='Correo electrónico del usuario')
-    contrasena = Column(String(128), nullable=False, comment='Contraseña cifrada del usuario')
-    estatus = Column(Enum('Activo', 'Inactivo'), nullable=False, comment='Estado actual del usuario')
-    fecha_registro = Column(DateTime, nullable=False, default=datetime.utcnow)
-    fecha_actualizacion = Column(DateTime, nullable=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, comment="Unique user ID")
+    username = Column(String(60), nullable=False, comment="Username")
+    email = Column(String(100), nullable=False, comment="User email")
+    password = Column(String(128), nullable=False, comment="Hashed password")
+    status = Column(Enum("Active", "Inactive"), nullable=False, comment="Current user status")
+    registration_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    update_date = Column(DateTime, nullable=True)

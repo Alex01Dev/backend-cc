@@ -1,30 +1,32 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
-class UsuarioBase(BaseModel):
-    nombre_usuario: str
-    correo_electronico: EmailStr
-    estatus: str
+class UserBase(BaseModel):
+    username: str
+    email: EmailStr
+    status: str
 
-class UsuarioCreate(UsuarioBase):
-    contrasena: str
+class UserCreate(UserBase):
+    password: str
 
-class Usuario(BaseModel):
+class User(BaseModel):
     id: int
-    nombre_usuario: str
-    correo_electronico: EmailStr
-    estatus: str
-    fecha_registro: datetime
+    username: str
+    email: EmailStr
+    status: str
+    registration_date: datetime
+
     class Config:
-        orm_mode = True
+        from_attributes = True  # replaces orm_mode
 
-class UsuarioLogin(BaseModel):
-    nombre_usuario: str
-    contrasena: str
+class UserLogin(BaseModel):
+    username: str
+    password: str
 
-class UsuarioSimple(BaseModel):
+class UserSimple(BaseModel):
     id: int
-    nombre_usuario: str
-    estatus: str
+    username: str
+    status: str
+
     class Config:
-        orm_mode = True
+        from_attributes = True
