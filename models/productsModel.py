@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean
 from config.db import Base
+from schemas.productSchemas import CategoriaProducto
 
 class Product(Base):
     __tablename__ = "tbb_products"
