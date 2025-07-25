@@ -5,7 +5,7 @@ from schemas.productSchemas import Product, ProductCreate
 from controller import productController
 from schemas.userSchemas import User
 from config.jwt import get_current_user  # Importa tu función aquí
-from services.cloudinary import upload_image
+from services.cloudinary import upload_image, DEFAULT_IMAGE
 
 product_router = APIRouter(prefix="/products", tags=["products"])
 
@@ -23,12 +23,13 @@ async def create(
     carbon_footprint: float = Form(...),
     recyclable_packaging: bool = Form(...),
     local_origin: bool = Form(...),
-    image: UploadFile = File(...),
+    image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    image_url = upload_image(image)
-    
+    # Llama a upload_image que maneja internamente el default
+    image_url = upload_image(image) if image else DEFAULT_IMAGE
+
     product_data = {
         "name": name,
         "category": category,
@@ -39,6 +40,7 @@ async def create(
     }
     
     return productController.create_product(db, product_data)
+
 
 @product_router.get("/get", response_model=list[Product])
 def read_all(

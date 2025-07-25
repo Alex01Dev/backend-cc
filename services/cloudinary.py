@@ -10,6 +10,12 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
+DEFAULT_IMAGE = os.getenv("DEFAULT_PRODUCT_IMAGE")
+
 def upload_image(file):
-    result = cloudinary.uploader.upload(file.file)
-    return result["secure_url"]
+    if file:
+        result = cloudinary.uploader.upload(file.file)
+        return result["secure_url"]
+    else:
+        # Retorna la imagen por defecto si no hay archivo
+        return DEFAULT_IMAGE
