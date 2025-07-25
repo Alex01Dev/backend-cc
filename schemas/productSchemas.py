@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from enum import Enum
 
 class CategoriaProducto(str, Enum):
@@ -14,16 +14,17 @@ class CategoriaProducto(str, Enum):
 
 class ProductBase(BaseModel):
     name: str
-    category: CategoriaProducto  # Aquí usamos el Enum directamente
+    category: CategoriaProducto
     carbon_footprint: float
     recyclable_packaging: bool
     local_origin: bool
 
 class ProductCreate(ProductBase):
-    pass
+    pass  # no lleva imagen porque se sube aparte
 
 class Product(ProductBase):
     id: int
+    image_url: HttpUrl | None = None  # NUEVO
 
     class Config:
         from_attributes = True

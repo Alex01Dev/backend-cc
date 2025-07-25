@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from config.db import SessionLocal
 from schemas.productSchemas import Product, ProductCreate
 from controller import productController
 from schemas.userSchemas import User
 from config.jwt import get_current_user  # Importa tu función aquí
+from services.cloudinary import upload_image
 
 product_router = APIRouter(prefix="/products", tags=["products"])
 
@@ -16,12 +17,28 @@ def get_db():
         db.close()
 
 @product_router.post("/create", response_model=Product)
-def create(
-    product: ProductCreate, 
+async def create(
+    name: str = Form(...),
+    category: str = Form(...),
+    carbon_footprint: float = Form(...),
+    recyclable_packaging: bool = Form(...),
+    local_origin: bool = Form(...),
+    image: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)  # Protección JWT
+    current_user: User = Depends(get_current_user)
 ):
-    return productController.create_product(db, product)
+    image_url = upload_image(image)
+    
+    product_data = {
+        "name": name,
+        "category": category,
+        "carbon_footprint": carbon_footprint,
+        "recyclable_packaging": recyclable_packaging,
+        "local_origin": local_origin,
+        "image_url": image_url
+    }
+    
+    return productController.create_product(db, product_data)
 
 @product_router.get("/get", response_model=list[Product])
 def read_all(

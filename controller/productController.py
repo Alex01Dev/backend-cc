@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from models.productsModel import Product
 from schemas.productSchemas import ProductCreate
 
-def create_product(db: Session, product: ProductCreate):
-    db_product = Product(**product.model_dump())
+def create_product(db: Session, product_data: dict):
+    db_product = Product(**product_data)
     db.add(db_product)
     db.commit()
     db.refresh(db_product)

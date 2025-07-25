@@ -11,3 +11,4 @@ class Product(Base):
     carbon_footprint = Column(Float)
     recyclable_packaging = Column(Boolean)
     local_origin = Column(Boolean)
+    image_url = Column(String(500))

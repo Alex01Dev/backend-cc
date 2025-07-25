@@ -27,3 +27,6 @@ uvicorn==0.34.0
 pydantic[email]
 pandas
 scikit-learn
+cloudinary
+python-multipart
+python-dotenv
