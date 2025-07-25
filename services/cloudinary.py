@@ -11,11 +11,12 @@ cloudinary.config(
 )
 
 DEFAULT_IMAGE = os.getenv("DEFAULT_PRODUCT_IMAGE")
+DEFAULT_USER_IMAGE = os.getenv("DEFAULT_USER_IMAGE")
 
-def upload_image(file):
+
+def upload_image(file, default_type: str = "product"):
     if file:
         result = cloudinary.uploader.upload(file.file)
         return result["secure_url"]
     else:
-        # Retorna la imagen por defecto si no hay archivo
-        return DEFAULT_IMAGE
+        return DEFAULT_USER_IMAGE if default_type == "user" else DEFAULT_IMAGE

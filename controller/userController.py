@@ -19,10 +19,11 @@ def get_user_by_username_or_email(db: Session, username: str, email: str):
 def create_user(db: Session, user: UserCreate):
     hashed_password = pwd_context.hash(user.password)
     db_user = User(
-        username=user.username,
-        email=user.email,
-        password=hashed_password,
-        status=user.status
+    username=user.username,
+    email=user.email,
+    password=hashed_password,
+    status=user.status,
+    profile_picture=user.profile_picture
     )
     db.add(db_user)
     db.commit()

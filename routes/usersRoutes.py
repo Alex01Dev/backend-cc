@@ -17,6 +17,8 @@ from controller.userController import (
     create_user,
     get_active_users
 )
+from fastapi import Form, File, UploadFile
+from services.cloudinary import upload_image 
 
 user = APIRouter()
 security = HTTPBearer()
@@ -46,16 +48,28 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     }
 
 @user.post("/register", response_model=User, tags=["Users"])
-async def register_new_user(user_data: UserCreate, db: Session = Depends(get_db)):
-    user_data.status = user_data.status or "Active"
-
-    existing_user = get_user_by_username_or_email(
-        db=db,
-        username=user_data.username,
-        email=user_data.email
-    )
+async def register_new_user(
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    status: str = Form(...),
+    image: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    existing_user = get_user_by_username_or_email(db, username=username, email=email)
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
+
+    # Subir imagen o usar por defecto
+    profile_picture = upload_image(image, default_type="user")
+
+    user_data = UserCreate(
+        username=username,
+        email=email,
+        password=password,
+        status=status,
+        profile_picture=profile_picture
+    )
 
     return create_user(db=db, user=user_data)
 
