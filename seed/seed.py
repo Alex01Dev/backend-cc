@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 from models.usersModel import User
 from models.productsModel import Product
 from models.interactionModel import Interaccion
+from models.commentModel import Comment  # Asegúrate de que esta ruta sea correcta
 from config.db import SessionLocal, engine
 
 # Configuración para hashear contraseñas
@@ -24,15 +25,26 @@ user_emails = [
 ]
 
 product_categories = [
-    "Alimentos", "Electrónica", "Ropa", "Hogar", 
-    "Juguetes", "Libros", "Deportes", "Belleza"
+    "Alimentos", "Tecnologia", "Ropa", "Hogar", 
+    "Limpieza", "Salud", "Papeleria", "Otros"
 ]
 
 product_names = [
-    "Leche Orgánica", "Smartphone Eco", "Camiseta Algodón Orgánico",
-    "Jabón Natural", "Libro Sostenibilidad", "Bicicleta Urbana",
-    "Taza Reutilizable", "Pan Integral", "Zapatos Veganos",
-    "Portátil Reciclado", "Bolsa Tela", "Champú Sólido"
+    "Leche Orgánica", "Botella ecologica", "Camiseta Algodón Orgánico",
+    "Jabón Natural", "Libro Sostenibilidad", "Bicicleta",
+    "Taza de bambu", "Pan Integral", "Zapatos ecologicos",
+    "pajillas Reciclables", "Bolsa Tela", "Champu Sólido"
+]
+
+sample_comments = [
+    "Excelente producto, muy recomendable.",
+    "Me encantó, volvería a comprarlo.",
+    "Buena relación calidad-precio.",
+    "No era lo que esperaba, pero funciona.",
+    "Empaque ecológico, muy bien.",
+    "Lo recibí a tiempo y en buen estado.",
+    "Podría mejorar, pero cumple su función.",
+    "Estoy satisfecho con la compra."
 ]
 
 def hash_password(password: str):
@@ -77,8 +89,20 @@ def create_interactions(db: Session, users, products, count_per_user=7):
                 user_id=user.id,
                 product_id=random.choice(products).id,
                 interaction=random.choice(interaction_types),
-                created_at=datetime.utcnow() - timedelta(days=random.randint(0, 29)))
+                created_at=datetime.utcnow() - timedelta(days=random.randint(0, 29))
+            )
             db.add(interaction)
+    db.commit()
+
+def create_comments(db: Session, users, products, comments_per_product=3):
+    for product in random.sample(products, k=min(len(products), 6)):  # Solo 6 productos comentados
+        for _ in range(comments_per_product):
+            comment = Comment(
+                user_id=random.choice(users).id,
+                product_id=product.id,
+                content=random.choice(sample_comments)
+            )
+            db.add(comment)
     db.commit()
 
 def main():
@@ -87,17 +111,21 @@ def main():
     try:
         print("Creando usuarios...")
         users = create_users(db)
-        
+
         print("Creando productos...")
         products = create_products(db)
-        
+
         print("Creando interacciones...")
         create_interactions(db, users, products)
-        
+
+        print("Creando comentarios...")
+        create_comments(db, users, products)
+
         print("\nSeeder completado exitosamente!")
         print(f"Total usuarios creados: {len(users)}")
         print(f"Total productos creados: {len(products)}")
-        print(f"Total interacciones creadas: {len(users)*7}")  # 7 interacciones por usuario
+        print(f"Total interacciones creadas: {len(users)*7}")
+        print(f"Total comentarios estimados: {min(len(products),6)*3}")
     except Exception as e:
         db.rollback()
         print(f"\nError en el seeder: {e}")

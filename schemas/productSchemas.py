@@ -8,7 +8,6 @@ class CategoriaProducto(str, Enum):
     limpieza = "Limpieza"
     hogar = "Hogar"
     salud = "Salud"
-    bebidas = "Bebidas"
     papeleria = "Papeleria"
     otros = "Otros"
 
