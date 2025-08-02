@@ -42,16 +42,19 @@ class Seeder:
         ]
         
         self.image_urls = [
-            "https://example.com/images/product1.jpg",
-            "https://example.com/images/product2.jpg",
-            "https://example.com/images/product3.jpg"
+            "https://images.unsplash.com/photo-1590080876434-bd4a8d8e071b",
+            "https://images.unsplash.com/photo-1600185365522-5e0f9fa2badd",
+            "https://images.unsplash.com/photo-1542831371-d531d36971e6",
+            "https://images.unsplash.com/photo-1611095564981-0d4bfe9d1804"
         ]
-        
+
         self.profile_pictures = [
-            "https://example.com/profiles/user1.jpg",
-            "https://example.com/profiles/user2.jpg",
-            "https://example.com/profiles/user3.jpg"
+            "https://randomuser.me/api/portraits/men/32.jpg",
+            "https://randomuser.me/api/portraits/women/45.jpg",
+            "https://randomuser.me/api/portraits/men/76.jpg",
+            "https://randomuser.me/api/portraits/women/12.jpg"
         ]
+
         
         self.sample_comments = [
             "Excelente producto, muy recomendable.",
