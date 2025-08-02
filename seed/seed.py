@@ -5,132 +5,198 @@ from passlib.context import CryptContext
 from models.usersModel import User
 from models.productsModel import Product
 from models.interactionModel import Interaccion
-from models.commentModel import Comment  # Asegúrate de que esta ruta sea correcta
+from models.commentModel import Comment
 from config.db import SessionLocal, engine
+from typing import List
 
 # Configuración para hashear contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Datos de ejemplo
-user_names = [
-    "Juan Pérez", "María García", "Carlos López", "Ana Martínez",
-    "Luis Rodríguez", "Sofía Hernández", "Miguel González", "Elena Díaz"
-]
+class Seeder:
+    def __init__(self):
+        self.db = SessionLocal()
+        self.user_data = [
+            {"username": "Juan Pérez", "email": "juan.perez@example.com"},
+            {"username": "María García", "email": "maria.garcia@example.com"},
+            {"username": "Carlos López", "email": "carlos.lopez@example.com"},
+            {"username": "Ana Martínez", "email": "ana.martinez@example.com"},
+            {"username": "Luis Rodríguez", "email": "luis.rodriguez@example.com"},
+            {"username": "Sofía Hernández", "email": "sofia.hernandez@example.com"},
+            {"username": "Miguel González", "email": "miguel.gonzalez@example.com"},
+            {"username": "Elena Díaz", "email": "elena.diaz@example.com"}
+        ]
+        
+        self.product_data = [
+            {"name": "Leche Orgánica", "category": "Alimentos"},
+            {"name": "Botella ecologica", "category": "Hogar"},
+            {"name": "Camiseta Algodón Orgánico", "category": "Ropa"},
+            {"name": "Jabón Natural", "category": "Limpieza"},
+            {"name": "Libro Sostenibilidad", "category": "Papeleria"},
+            {"name": "Bicicleta", "category": "Tecnologia"},
+            {"name": "Taza de bambu", "category": "Hogar"},
+            {"name": "Pan Integral", "category": "Alimentos"},
+            {"name": "Zapatos ecologicos", "category": "Ropa"},
+            {"name": "Pajillas Reciclables", "category": "Hogar"},
+            {"name": "Bolsa Tela", "category": "Ropa"},
+            {"name": "Champu Sólido", "category": "Limpieza"}
+        ]
+        
+        self.image_urls = [
+            "https://example.com/images/product1.jpg",
+            "https://example.com/images/product2.jpg",
+            "https://example.com/images/product3.jpg"
+        ]
+        
+        self.profile_pictures = [
+            "https://example.com/profiles/user1.jpg",
+            "https://example.com/profiles/user2.jpg",
+            "https://example.com/profiles/user3.jpg"
+        ]
+        
+        self.sample_comments = [
+            "Excelente producto, muy recomendable.",
+            "Me encantó, volvería a comprarlo.",
+            "Buena relación calidad-precio.",
+            "No era lo que esperaba, pero funciona.",
+            "Empaque ecológico, muy bien.",
+            "Lo recibí a tiempo y en buen estado.",
+            "Podría mejorar, pero cumple su función.",
+            "Estoy satisfecho con la compra."
+        ]
 
-user_emails = [
-    "juan.perez@example.com", "maria.garcia@example.com", 
-    "carlos.lopez@example.com", "ana.martinez@example.com",
-    "luis.rodriguez@example.com", "sofia.hernandez@example.com",
-    "miguel.gonzalez@example.com", "elena.diaz@example.com"
-]
+    def hash_password(self, password: str) -> str:
+        return pwd_context.hash(password)
 
-product_categories = [
-    "Alimentos", "Tecnologia", "Ropa", "Hogar", 
-    "Limpieza", "Salud", "Papeleria", "Otros"
-]
+    def create_users(self) -> List[User]:
+        try:
+            users = []
+            for i, user_info in enumerate(self.user_data):
+                user = User(
+                    username=user_info["username"],
+                    email=user_info["email"],
+                    profile_picture=random.choice(self.profile_pictures),
+                    password=self.hash_password(f"Password{i+1}!"),
+                    status="Active",
+                    registration_date=datetime.utcnow() - timedelta(days=random.randint(1, 30)),
+                    update_date=datetime.utcnow() if random.random() > 0.5 else None
+                )
+                self.db.add(user)
+                users.append(user)
+            self.db.commit()
+            print(f"✅ {len(users)} usuarios creados en tbb_users")
+            return users
+        except Exception as e:
+            self.db.rollback()
+            print(f"❌ Error creando usuarios: {e}")
+            raise
 
-product_names = [
-    "Leche Orgánica", "Botella ecologica", "Camiseta Algodón Orgánico",
-    "Jabón Natural", "Libro Sostenibilidad", "Bicicleta",
-    "Taza de bambu", "Pan Integral", "Zapatos ecologicos",
-    "pajillas Reciclables", "Bolsa Tela", "Champu Sólido"
-]
+    def create_products(self) -> List[Product]:
+        try:
+            products = []
+            for product_info in self.product_data:
+                product = Product(
+                    name=product_info["name"],
+                    category=product_info["category"],
+                    carbon_footprint=round(random.uniform(0.1, 10.0), 2),
+                    recyclable_packaging=random.choice([True, False]),
+                    local_origin=random.choice([True, False]),
+                    image_url=random.choice(self.image_urls)
+                )
+                self.db.add(product)
+                products.append(product)
+            self.db.commit()
+            print(f"✅ {len(products)} productos creados en tbb_products")
+            return products
+        except Exception as e:
+            self.db.rollback()
+            print(f"❌ Error creando productos: {e}")
+            raise
 
-sample_comments = [
-    "Excelente producto, muy recomendable.",
-    "Me encantó, volvería a comprarlo.",
-    "Buena relación calidad-precio.",
-    "No era lo que esperaba, pero funciona.",
-    "Empaque ecológico, muy bien.",
-    "Lo recibí a tiempo y en buen estado.",
-    "Podría mejorar, pero cumple su función.",
-    "Estoy satisfecho con la compra."
-]
+    def create_interactions(self, users: List[User], products: List[Product]) -> None:
+        try:
+            interaction_types = [1, 2, 3]  # 1: vista, 2: clic, 3: favorito
+            total_interactions = 0
+            
+            for user in users:
+                interactions_count = random.randint(5, 10)  # 5-10 interacciones por usuario
+                for _ in range(interactions_count):
+                    interaction = Interaccion(
+                        user_id=user.id,
+                        product_id=random.choice(products).id,
+                        interaction=random.choice(interaction_types),
+                        created_at=datetime.utcnow() - timedelta(days=random.randint(0, 29))
+                    )
+                    self.db.add(interaction)
+                    total_interactions += 1
+            
+            self.db.commit()
+            print(f"✅ {total_interactions} interacciones creadas en tbd_interactions")
+        except Exception as e:
+            self.db.rollback()
+            print(f"❌ Error creando interacciones: {e}")
+            raise
 
-def hash_password(password: str):
-    return pwd_context.hash(password)
+    def create_comments(self, users: List[User], products: List[Product]) -> None:
+        try:
+            total_comments = 0
+            products_to_comment = random.sample(products, k=min(len(products), 8))  # 8 productos con comentarios
+            
+            for product in products_to_comment:
+                comments_count = random.randint(1, 4)  # 1-4 comentarios por producto
+                for _ in range(comments_count):
+                    comment = Comment(
+                        user_id=random.choice(users).id,
+                        product_id=product.id,
+                        content=random.choice(self.sample_comments),
+                        created_at=datetime.utcnow() - timedelta(days=random.randint(0, 29))
+                    )
+                    self.db.add(comment)
+                    total_comments += 1
+            
+            self.db.commit()
+            print(f"✅ {total_comments} comentarios creados en tbd_comments")
+        except Exception as e:
+            self.db.rollback()
+            print(f"❌ Error creando comentarios: {e}")
+            raise
 
-def create_users(db: Session, count=8):
-    users = []
-    for i in range(count):
-        user = User(
-            username=user_names[i],
-            email=user_emails[i],
-            password=hash_password(f"Password{i+1}!"),
-            status="Active",
-            registration_date=datetime.utcnow() - timedelta(days=random.randint(1, 30)),
-            update_date=None
-        )
-        users.append(user)
-        db.add(user)
-    db.commit()
-    return users
-
-def create_products(db: Session, count=12):
-    products = []
-    for i in range(count):
-        product = Product(
-            name=product_names[i],
-            category=random.choice(product_categories),
-            carbon_footprint=round(random.uniform(0.1, 10.0), 2),
-            recyclable_packaging=random.choice([True, False]),
-            local_origin=random.choice([True, False])
-        )
-        products.append(product)
-        db.add(product)
-    db.commit()
-    return products
-
-def create_interactions(db: Session, users, products, count_per_user=7):
-    interaction_types = [1, 2, 3]  # 1: vista, 2: clic, 3: favorito
-    for user in users:
-        for _ in range(count_per_user):
-            interaction = Interaccion(
-                user_id=user.id,
-                product_id=random.choice(products).id,
-                interaction=random.choice(interaction_types),
-                created_at=datetime.utcnow() - timedelta(days=random.randint(0, 29))
-            )
-            db.add(interaction)
-    db.commit()
-
-def create_comments(db: Session, users, products, comments_per_product=3):
-    for product in random.sample(products, k=min(len(products), 6)):  # Solo 6 productos comentados
-        for _ in range(comments_per_product):
-            comment = Comment(
-                user_id=random.choice(users).id,
-                product_id=product.id,
-                content=random.choice(sample_comments)
-            )
-            db.add(comment)
-    db.commit()
-
-def main():
-    db = SessionLocal()
-    
-    try:
-        print("Creando usuarios...")
-        users = create_users(db)
-
-        print("Creando productos...")
-        products = create_products(db)
-
-        print("Creando interacciones...")
-        create_interactions(db, users, products)
-
-        print("Creando comentarios...")
-        create_comments(db, users, products)
-
-        print("\nSeeder completado exitosamente!")
-        print(f"Total usuarios creados: {len(users)}")
-        print(f"Total productos creados: {len(products)}")
-        print(f"Total interacciones creadas: {len(users)*7}")
-        print(f"Total comentarios estimados: {min(len(products),6)*3}")
-    except Exception as e:
-        db.rollback()
-        print(f"\nError en el seeder: {e}")
-    finally:
-        db.close()
+    def run(self):
+        try:
+            # Crear tablas si no existen
+            from models.usersModel import Base
+            Base.metadata.create_all(bind=engine)
+            
+            print("\n🏗️ Iniciando seeder...")
+            
+            # Limpiar tablas existentes (opcional, solo para desarrollo)
+            print("🧹 Limpiando datos existentes...")
+            self.db.query(Comment).delete()
+            self.db.query(Interaccion).delete()
+            self.db.query(Product).delete()
+            self.db.query(User).delete()
+            self.db.commit()
+            
+            users = self.create_users()
+            products = self.create_products()
+            self.create_interactions(users, products)
+            self.create_comments(users, products)
+            
+            print("\n Seeder completado exitosamente!")
+            
+            # Mostrar resumen
+            print("\n Resumen final:")
+            print(f"- Usuarios: {self.db.query(User).count()}")
+            print(f"- Productos: {self.db.query(Product).count()}")
+            print(f"- Interacciones: {self.db.query(Interaccion).count()}")
+            print(f"- Comentarios: {self.db.query(Comment).count()}")
+            
+        except Exception as e:
+            print(f"\n Error crítico en el seeder: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            self.db.close()
 
 if __name__ == "__main__":
-    main()
+    seeder = Seeder()
+    seeder.run()
