@@ -27,8 +27,8 @@ app.include_router(comment_router)
 
 @app.on_event("startup")
 def startup_event():
-    run_reset = True   # Cambia a True para limpiar la base de datos
-    run_seeder = False   # Cambia a True para ejecutar el seeder
+    run_reset = False   # Cambia a True para limpiar la base de datos
+    run_seeder = True   # Cambia a True para ejecutar el seeder
 
     if run_reset:
         print(" Reiniciando base de datos...")
