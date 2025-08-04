@@ -6,8 +6,9 @@ from models.usersModel import User
 from models.productsModel import Product
 from models.interactionModel import Interaccion
 from models.commentModel import Comment
-from config.db import SessionLocal, engine
+from config.db import SessionLocal, engine, Base
 from typing import List
+from sqlalchemy import text
 
 # Configuración para hashear contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -54,7 +55,6 @@ class Seeder:
             "https://randomuser.me/api/portraits/men/76.jpg",
             "https://randomuser.me/api/portraits/women/12.jpg"
         ]
-
         
         self.sample_comments = [
             "Excelente producto, muy recomendable.",
@@ -69,6 +69,41 @@ class Seeder:
 
     def hash_password(self, password: str) -> str:
         return pwd_context.hash(password)
+
+    def clear_database(self):
+        """Limpia todas las tablas y reinicia los contadores de ID"""
+        try:
+            print("🧹 Limpiando base de datos y reiniciando IDs...")
+            
+            # Desactivar verificación de claves foráneas temporalmente
+            self.db.execute(text("SET FOREIGN_KEY_CHECKS=0"))
+            
+            # Limpiar tablas en el orden correcto (primero las que dependen de otras)
+            tables = [
+                "tbd_comments",
+                "tbd_interactions",
+                "tbb_products",
+                "tbb_users"
+            ]
+            
+            for table in tables:
+                self.db.execute(text(f"TRUNCATE TABLE {table}"))
+                print(f"✓ Tabla {table} truncada")
+                
+            # Reactivar verificación de claves foráneas
+            self.db.execute(text("SET FOREIGN_KEY_CHECKS=1"))
+            
+            # Reiniciar los auto-incrementos
+            for table in tables:
+                self.db.execute(text(f"ALTER TABLE {table} AUTO_INCREMENT = 1"))
+                print(f"✓ Auto-incremento de {table} reiniciado a 1")
+            
+            self.db.commit()
+            print("✅ Base de datos completamente limpia y IDs reiniciados")
+        except Exception as e:
+            self.db.rollback()
+            print(f"❌ Error al limpiar la base de datos: {e}")
+            raise
 
     def create_users(self) -> List[User]:
         try:
@@ -166,28 +201,22 @@ class Seeder:
     def run(self):
         try:
             # Crear tablas si no existen
-            from models.usersModel import Base
             Base.metadata.create_all(bind=engine)
             
-            print("\n🏗️ Iniciando seeder...")
+            # Limpiar la base de datos completamente
+            self.clear_database()
             
-            # Limpiar tablas existentes (opcional, solo para desarrollo)
-            print("🧹 Limpiando datos existentes...")
-            self.db.query(Comment).delete()
-            self.db.query(Interaccion).delete()
-            self.db.query(Product).delete()
-            self.db.query(User).delete()
-            self.db.commit()
+            print("\n Comenzando inserción de datos...")
             
+            # Insertar datos
             users = self.create_users()
             products = self.create_products()
             self.create_interactions(users, products)
             self.create_comments(users, products)
             
+            # Verificación final
             print("\n Seeder completado exitosamente!")
-            
-            # Mostrar resumen
-            print("\n Resumen final:")
+            print("\n Resumen de datos insertados:")
             print(f"- Usuarios: {self.db.query(User).count()}")
             print(f"- Productos: {self.db.query(Product).count()}")
             print(f"- Interacciones: {self.db.query(Interaccion).count()}")
@@ -201,5 +230,10 @@ class Seeder:
             self.db.close()
 
 if __name__ == "__main__":
-    seeder = Seeder()
-    seeder.run()
+    should_seed = False  # Cambia esto a False si no quieres ejecutar el seeder
+
+    if should_seed:
+        seeder = Seeder()
+        seeder.run()
+    else:
+        print(" Seeder desactivado manualmente.")
