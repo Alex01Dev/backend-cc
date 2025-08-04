@@ -7,6 +7,7 @@ from routes.interactionRoutes import interaction
 from routes.training import training_router
 from routes.commentsRoutes import comment_router
 from seed.seed import Seeder
+from seed.reset_db import DatabaseResetter
 
 # Crear las tablas si no existen
 Base.metadata.create_all(bind=engine)
@@ -24,7 +25,20 @@ app.include_router(interaction)
 app.include_router(training_router)
 app.include_router(comment_router)
 
-@app.on_event ("startup")
+@app.on_event("startup")
 def startup_event():
-    seed=Seeder()
-    seed.run()
+    run_reset = True   # Cambia a True para limpiar la base de datos
+    run_seeder = False   # Cambia a True para ejecutar el seeder
+
+    if run_reset:
+        print(" Reiniciando base de datos...")
+        resetter = DatabaseResetter()
+        resetter.reset()
+
+    if run_seeder:
+        print(" Ejecutando seeder...")
+        seeder = Seeder()
+        seeder.run()
+
+    
+    
