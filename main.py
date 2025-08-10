@@ -18,6 +18,16 @@ app = FastAPI(
     version="1.0"
 )
 
+# Habilitar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Puedes restringir esto a ["http://localhost:3000"] si es necesario
+    allow_credentials=True,
+    allow_methods=["*"],  # Asegura que 'OPTIONS' esté incluido
+    allow_headers=["*"],
+)
+
+
 # Registrar rutas
 app.include_router(product_router)
 app.include_router(user)
