@@ -6,6 +6,7 @@ from config.db import Base, engine
 from routes.interactionRoutes import interaction
 from routes.training import training_router
 from routes.commentsRoutes import comment_router
+from routes.notification_routes import notification_routes
 from seed.seed import Seeder
 from seed.reset_db import DatabaseResetter
 
@@ -34,21 +35,22 @@ app.include_router(user)
 app.include_router(interaction)
 app.include_router(training_router)
 app.include_router(comment_router)
+app.include_router(notification_routes)
 
-@app.on_event("startup")
-def startup_event():
-    run_reset = False   # Cambia a True para limpiar la base de datos
-    run_seeder = True   # Cambia a True para ejecutar el seeder
+# @app.on_event("startup")
+# def startup_event():
+#     run_reset = False   # Cambia a True para limpiar la base de datos
+#     run_seeder = True   # Cambia a True para ejecutar el seeder
 
-    if run_reset:
-        print(" Reiniciando base de datos...")
-        resetter = DatabaseResetter()
-        resetter.reset()
+#     if run_reset:
+#         print(" Reiniciando base de datos...")
+#         resetter = DatabaseResetter()
+#         resetter.reset()
 
-    if run_seeder:
-        print(" Ejecutando seeder...")
-        seeder = Seeder()
-        seeder.run()
+#     if run_seeder:
+#         print(" Ejecutando seeder...")
+#         seeder = Seeder()
+#         seeder.run()
 
     
     

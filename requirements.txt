@@ -30,3 +30,4 @@ scikit-learn
 cloudinary
 python-multipart
 python-dotenv
+websockets
