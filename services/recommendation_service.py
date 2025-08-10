@@ -1,10 +1,18 @@
-# controller/notification_controller.py
 from fastapi import WebSocket, WebSocketDisconnect, Depends
 from sqlalchemy.orm import Session
 from services.recoserv import get_best_recommendation
-from config.db import get_db  # Asumiendo tienes función para obtener sesión DB
+from sqlalchemy.orm import Session
+from services.training import entrenar_recomendaciones
+from config.db import get_db
 import asyncio
 import json
+
+def get_best_recommendation(db: Session, user_id: int):
+    recomendaciones = entrenar_recomendaciones(db, user_id)
+    if recomendaciones:
+        return recomendaciones[0]  # Mejor recomendación
+    return None
+
 
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
     await websocket.accept()
