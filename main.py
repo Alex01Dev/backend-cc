@@ -29,7 +29,7 @@ app.add_middleware(
 )
 
 
-# Registrar rutas
+# Registrar rutas # Registrar rutas arrancar proyecto uvicorn main:app --reload --host 0.0.0.0 --port 8000 env\Scripts\activate
 app.include_router(product_router)
 app.include_router(user)
 app.include_router(interaction)

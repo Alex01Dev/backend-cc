@@ -5,6 +5,7 @@ from datetime import datetime
 class UserSimple(BaseModel):
     id: int
     username: str
+    profile_picture: str 
 
     class Config:
         from_attributes = True

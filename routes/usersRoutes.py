@@ -3,9 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from datetime import timedelta
+import os
+
 
 from config.db import get_db
 from config.jwt import create_access_token, get_current_user
+from config.settings import DEFAULT_USER_IMAGE
 
 from models.usersModel import User as UserDB
 from schemas.userSchemas import UserLogin, UserCreate, User, UserSimple
@@ -37,14 +40,15 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
 
     access_token_expires = timedelta(minutes=30)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.username,"user_id": user.id, }, expires_delta=access_token_expires
     )
 
     return {
         "access_token": access_token,
         "token_type": "bearer",
         "logged_user": user.username,
-        "user_email": user.email
+        "user_email": user.email,
+        "user_id": user.id
     }
 
 @user.post("/register", response_model=User, tags=["Users"])
@@ -61,7 +65,11 @@ async def register_new_user(
         raise HTTPException(status_code=400, detail="User already exists")
 
     # Subir imagen o usar por defecto
-    profile_picture = upload_image(image, default_type="user")
+    # Subir imagen o usar por defecto
+    if image is not None:
+        profile_picture = upload_image(image, default_type="user")
+    else:
+        profile_picture = os.getenv("DEFAULT_USER_IMAGE")# lee desde el .env
 
     user_data = UserCreate(
         username=username,

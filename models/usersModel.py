@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Enum
 from datetime import datetime
 from config.db import Base
+from sqlalchemy.orm import relationship
 
 class User(Base):
     __tablename__ = "tbb_users"
@@ -13,3 +14,5 @@ class User(Base):
     status = Column(Enum("Active", "Inactive"), nullable=False, comment="Current user status")
     registration_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     update_date = Column(DateTime, nullable=True)
+    
+    comments = relationship("Comment", back_populates="user")

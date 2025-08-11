@@ -1,6 +1,5 @@
 from fastapi import WebSocket, WebSocketDisconnect, Depends
 from sqlalchemy.orm import Session
-from services.recoserv import get_best_recommendation
 from sqlalchemy.orm import Session
 from services.training import entrenar_recomendaciones
 from config.db import get_db

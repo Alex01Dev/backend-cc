@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Text
 from sqlalchemy.sql import func
 from config.db import Base
+from sqlalchemy.orm import relationship
 
 class Comment(Base):
     __tablename__ = "tbd_comments"
@@ -13,3 +14,4 @@ class Comment(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     # Opcional: si quieres un campo para moderación o estado del comentario
     # status = Column(Enum("Pending", "Approved", "Rejected"), default="Pending")
+    user = relationship("User", back_populates="comments")
