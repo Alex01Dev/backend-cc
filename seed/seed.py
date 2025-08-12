@@ -11,64 +11,146 @@ from models.commentModel import Comment
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 class Seeder:
     def __init__(self):
         self.db = SessionLocal()
         self.faker = Faker('es_ES')
-        self.batch_size = 200  # Lotes más pequeños para mayor estabilidad
-    
+        self.batch_size = 200  # Lotes pequeños para estabilidad
+
+        # Diccionario de productos ecológicos
+        self.PRODUCTOS_POR_CATEGORIA = {
+            "Alimentos": {
+                "productos": [
+                    "Pan integral", "Leche de almendras", "Miel cruda", "Chocolate negro",
+                    "Café de sombra", "Galletas de avena", "Aceite de oliva", "Quinoa",
+                    "Snacks de lentejas", "Pasta de trigo duro"
+                ],
+                "materiales": ["orgánico", "vegano", "sin plástico", "de comercio justo"],
+                "carbon_footprint_range": (0.5, 5.0),
+                "sufijos": ["(Pack familiar)", "(Sin aditivos)", "(Energético)"]
+            },
+            "Ropa": {
+                "productos": [
+                    "Camiseta básica", "Pantalón cargo", "Vestido largo", "Chaqueta acolchada",
+                    "Calcetines", "Bragas térmicas", "Jersey de punto", "Sombrero de verano"
+                ],
+                "materiales": ["algodón orgánico", "bambú", "lino reciclado", "Tencel"],
+                "carbon_footprint_range": (5.0, 25.0),
+                "sufijos": ["(Edición limitada)", "(Talla ética)", "(Pack 3 u.)"]
+            },
+            "Limpieza": {
+                "productos": [
+                    "Jabón líquido", "Detergente en pastilla", "Limpiador multiusos", "Suavizante",
+                    "Desinfectante natural", "Esponja vegetal", "Cepillo de madera", "Bolsa de lavado"
+                ],
+                "materiales": ["biodegradable", "a base de vinagre", "con aceites esenciales"],
+                "carbon_footprint_range": (1.0, 8.0),
+                "sufijos": ["(Zero waste)", "(Sin fragancia)", "(Concentrado)"]
+            },
+            "Tecnologia": {
+                "productos": [
+                    "Cargador solar", "Auriculares inalámbricos", "Power bank", "Fundas para móvil",
+                    "Tablet", "Teclado ergonómico", "Ratón de bambú", "Altavoz portátil"
+                ],
+                "materiales": ["energía solar", "plástico reciclado", "metales responsables"],
+                "carbon_footprint_range": (10.0, 50.0),
+                "sufijos": ["(Eficiencia A+)", "(Reparable)", "(Modular)"]
+            },
+            "Hogar": {
+                "productos": [
+                    "Vela aromática", "Difusor de bambú", "Sartén antiadherente", "Taza cerámica",
+                    "Almohada ortopédica", "Manta térmica", "Juego de cubiertos", "Tabla de cortar"
+                ],
+                "materiales": ["cera de soja", "vidrio reciclado", "acero inoxidable"],
+                "carbon_footprint_range": (3.0, 20.0),
+                "sufijos": ["(Hecho a mano)", "(Diseño circular)"]
+            },
+            "Salud": {
+                "productos": [
+                    "Crema facial", "Protector solar", "Aceite de masaje", "Jabón íntimo",
+                    "Suplemento vitamínico", "Desodorante natural", "Cepillo de dientes", "Hilo dental"
+                ],
+                "materiales": ["ingredientes naturales", "sin parabenos", "vegano"],
+                "carbon_footprint_range": (2.0, 12.0),
+                "sufijos": ["(Dermatológico)", "(Sin fragancia)"]
+            },
+            "Papeleria": {
+                "productos": [
+                    "Cuaderno anillado", "Bolígrafo recargable", "Carpeta archivador", "Sobre kraft",
+                    "Postales ilustradas", "Bloc de notas", "Agenda anual", "Lápices de colores"
+                ],
+                "materiales": ["papel semilla", "cartón reciclado", "tinta vegetal"],
+                "carbon_footprint_range": (1.5, 6.0),
+                "sufijos": ["(Plantable)", "(100% reciclado)"]
+            },
+            "Otro": {
+                "productos": [
+                    "Kit de jardinería", "Juego de cubiertos", "Decoración mural", "Caja regalo",
+                    "Bolsa de tela", "Velas decorativas", "Portalápices", "Reloj de pared"
+                ],
+                "materiales": ["upcycled", "hecho a mano", "materiales mixtos"],
+                "carbon_footprint_range": (2.0, 15.0),
+                "sufijos": ["(Multiusos)", "(Personalizable)"]
+            }
+        }
+
+    def generar_producto_ecologico(self):
+        categoria = random.choice(list(self.PRODUCTOS_POR_CATEGORIA.keys()))
+        datos = self.PRODUCTOS_POR_CATEGORIA[categoria]
+        nombre = f"{random.choice(datos['productos'])} de {random.choice(datos['materiales'])} {random.choice(datos['sufijos'])}"
+        carbon_footprint = round(random.uniform(*datos['carbon_footprint_range']), 2)
+
+        return Product(
+            name=nombre[:255],
+            category=categoria[:100],
+            carbon_footprint=carbon_footprint,
+            recyclable_packaging=random.random() > 0.3,  # 70% True
+            local_origin=random.random() > 0.6,         # 40% True
+            image_url=f"https://res.cloudinary.com/ecoapp/image/{categoria.lower()}/{random.randint(1,50)}.jpg"[:500]
+        )
+
     def run(self, total_records=10000):
         try:
-            # Distribución optimizada para 10k registros
-            num_users = 1500  # 15%
+            num_users = 1500   # 15%
             num_products = 1500 # 15%
             num_comments = 3000 # 30%
             num_interactions = 4000 # 40%
 
-            # 1. Crear usuarios con status correcto
+            # 1. Usuarios
             print(f"🔹 Creando {num_users} usuarios...")
             for i in range(0, num_users, self.batch_size):
                 batch = []
                 for _ in range(min(self.batch_size, num_users - i)):
                     gender = random.choice(["male", "female"])
                     first_name = self.faker.first_name_male() if gender == "male" else self.faker.first_name_female()
-                    
+
                     batch.append(User(
                         username=f"{first_name.lower()}{random.randint(10,99)}"[:50],
-                        email=f"{first_name.lower()}.{self.faker.last_name().lower()}@example.com"[:100],
+                        email=f"{first_name.lower()}.{self.faker.last_name().lower()}@gmail.com"[:100],
                         password=self.hash_password("123456"),
                         profile_picture=f"https://randomuser.me/api/portraits/{'men' if gender == 'male' else 'women'}/{random.randint(1,99)}.jpg"[:255],
-                        status='active' if random.random() > 0.3 else 'inactive',  # Valores exactos
+                        status='active' if random.random() > 0.3 else 'inactive',
                         registration_date=datetime.now() - timedelta(days=random.randint(0, 365))
                     ))
                 self.db.bulk_save_objects(batch)
                 self.db.commit()
                 print(f"✅ Usuarios {i+1}-{i+len(batch)} creados")
 
-            # 2. Crear productos
+            # 2. Productos
             print(f"\n🔹 Creando {num_products} productos...")
-            categorias = ["Alimentos", "Cosméticos", "Limpieza", "Moda", "Hogar"]
             for i in range(0, num_products, self.batch_size):
-                batch = []
-                for _ in range(min(self.batch_size, num_products - i)):
-                    batch.append(Product(
-                        name=f"{random.choice(['Eco', 'Bio', 'Verde'])} {self.faker.word().capitalize()}"[:255],
-                        category=f"{random.choice(categorias)} {random.choice(['Orgánico', 'Natural', 'Sostenible'])}"[:100],
-                        carbon_footprint=round(random.uniform(0.5, 30.0), 2),
-                        recyclable_packaging=random.choice([True, False]),
-                        local_origin=random.choice([True, False]),
-                        image_url=f"https://res.cloudinary.com/demo/image/upload/eco_{random.randint(1,20)}.jpg"[:500]
-                    ))
+                batch = [self.generar_producto_ecologico() for _ in range(min(self.batch_size, num_products - i))]
                 self.db.bulk_save_objects(batch)
                 self.db.commit()
                 print(f"✅ Productos {i+1}-{i+len(batch)} creados")
 
-            # Obtener IDs existentes (optimizado)
+            # Obtener IDs existentes
             print("\n🔹 Obteniendo IDs para relaciones...")
             user_ids = [id[0] for id in self.db.query(User.id).yield_per(1000)]
             product_ids = [id[0] for id in self.db.query(Product.id).yield_per(1000)]
 
-            # 3. Crear comentarios
+            # 3. Comentarios
             print(f"\n🔹 Creando {num_comments} comentarios...")
             opiniones = [
                 "Muy buen producto, lo recomiendo", 
@@ -78,27 +160,29 @@ class Seeder:
                 "Totalmente ecológico como se describe"
             ]
             for i in range(0, num_comments, self.batch_size):
-                batch = []
-                for _ in range(min(self.batch_size, num_comments - i)):
-                    batch.append(Comment(
+                batch = [
+                    Comment(
                         user_id=random.choice(user_ids),
                         product_id=random.choice(product_ids),
                         content=random.choice(opiniones)[:500]
-                    ))
+                    )
+                    for _ in range(min(self.batch_size, num_comments - i))
+                ]
                 self.db.bulk_save_objects(batch)
                 self.db.commit()
                 print(f"✅ Comentarios {i+1}-{i+len(batch)} creados")
 
-            # 4. Crear interacciones
+            # 4. Interacciones
             print(f"\n🔹 Creando {num_interactions} interacciones...")
             for i in range(0, num_interactions, self.batch_size):
-                batch = []
-                for _ in range(min(self.batch_size, num_interactions - i)):
-                    batch.append(Interaccion(
+                batch = [
+                    Interaccion(
                         user_id=random.choice(user_ids),
                         product_id=random.choice(product_ids),
                         interaction=random.randint(1, 3)
-                    ))
+                    )
+                    for _ in range(min(self.batch_size, num_interactions - i))
+                ]
                 self.db.bulk_save_objects(batch)
                 self.db.commit()
                 print(f"✅ Interacciones {i+1}-{i+len(batch)} creadas")
@@ -112,6 +196,7 @@ class Seeder:
             raise
         finally:
             self.db.close()
-    
+
     def hash_password(self, password: str) -> str:
         return pwd_context.hash(password)
+
