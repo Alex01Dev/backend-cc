@@ -22,29 +22,29 @@ class Seeder:
         self.PRODUCTOS_POR_CATEGORIA = {
             "Alimentos": {
                 "productos": [
-                    "Pan integral", "Leche de almendras", "Miel cruda", "Chocolate negro",
-                    "Café de sombra", "Galletas de avena", "Aceite de oliva", "Quinoa",
-                    "Snacks de lentejas", "Pasta de trigo duro"
+                    "Pan integral", "Leche de almendras", "Miel pura", "Chocolate negro",
+                    "Café", "Galletas de avena", "Aceite de oliva", "Quinoa",
+                    "Pasta de trigo duro"
                 ],
-                "materiales": ["orgánico", "vegano", "sin plástico", "de comercio justo"],
+                "materiales": ["orgánico", "vegano", "artesanal"],
                 "carbon_footprint_range": (0.5, 5.0),
                 "sufijos": ["(Pack familiar)", "(Sin aditivos)", "(Energético)"]
             },
             "Ropa": {
                 "productos": [
-                    "Camiseta básica", "Pantalón cargo", "Vestido largo", "Chaqueta acolchada",
-                    "Calcetines", "Bragas térmicas", "Jersey de punto", "Sombrero de verano"
+                    "Camiseta básica", "Pantalón", "Vestido largo", "Chaqueta",
+                    "Calcetines", "Bragas térmicas", "Jersey", "Sombrero"
                 ],
-                "materiales": ["algodón orgánico", "bambú", "lino reciclado", "Tencel"],
+                "materiales": ["algodón orgánico", "bambú", "lino reciclado", "Piel"],
                 "carbon_footprint_range": (5.0, 25.0),
                 "sufijos": ["(Edición limitada)", "(Talla ética)", "(Pack 3 u.)"]
             },
             "Limpieza": {
                 "productos": [
-                    "Jabón líquido", "Detergente en pastilla", "Limpiador multiusos", "Suavizante",
+                    "Jabón", "Detergente en pastilla", "Limpiador multiusos", "Suavizante",
                     "Desinfectante natural", "Esponja vegetal", "Cepillo de madera", "Bolsa de lavado"
                 ],
-                "materiales": ["biodegradable", "a base de vinagre", "con aceites esenciales"],
+                "materiales": ["biodegradable", "orgánico", "Sin quimicos"],
                 "carbon_footprint_range": (1.0, 8.0),
                 "sufijos": ["(Zero waste)", "(Sin fragancia)", "(Concentrado)"]
             },
@@ -53,25 +53,25 @@ class Seeder:
                     "Cargador solar", "Auriculares inalámbricos", "Power bank", "Fundas para móvil",
                     "Tablet", "Teclado ergonómico", "Ratón de bambú", "Altavoz portátil"
                 ],
-                "materiales": ["energía solar", "plástico reciclado", "metales responsables"],
+                "materiales": ["energía solar", "plástico reciclado", "metales reciclados"],
                 "carbon_footprint_range": (10.0, 50.0),
                 "sufijos": ["(Eficiencia A+)", "(Reparable)", "(Modular)"]
             },
             "Hogar": {
                 "productos": [
-                    "Vela aromática", "Difusor de bambú", "Sartén antiadherente", "Taza cerámica",
-                    "Almohada ortopédica", "Manta térmica", "Juego de cubiertos", "Tabla de cortar"
+                    "Vela aromática", "Taza",
+                    "Tabla de cortar", "repiza"
                 ],
-                "materiales": ["cera de soja", "vidrio reciclado", "acero inoxidable"],
+                "materiales": ["cera", "plastico reciclado", ],
                 "carbon_footprint_range": (3.0, 20.0),
                 "sufijos": ["(Hecho a mano)", "(Diseño circular)"]
             },
             "Salud": {
                 "productos": [
-                    "Crema facial", "Protector solar", "Aceite de masaje", "Jabón íntimo",
-                    "Suplemento vitamínico", "Desodorante natural", "Cepillo de dientes", "Hilo dental"
+                    "Crema facial", "Protector solar", "Aceite para masaje", "Jabón íntimo",
+                    "Suplemento vitamínico", "Desodorante ", "Cepillo de dientes", "Hilo dental"
                 ],
-                "materiales": ["ingredientes naturales", "sin parabenos", "vegano"],
+                "materiales": ["a base de ingredientes naturales", "sin quimicos", "orgánico"],
                 "carbon_footprint_range": (2.0, 12.0),
                 "sufijos": ["(Dermatológico)", "(Sin fragancia)"]
             },
