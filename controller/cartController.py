@@ -25,7 +25,20 @@ def add_to_cart(db: Session, user_id: int, product_id: int, quantity: int):
     return cart_item
 
 def get_cart(db: Session, user_id: int):
-    return db.query(Cart).filter(Cart.user_id == user_id).all()
+    items = db.query(Cart).filter(Cart.user_id == user_id).all()
+    result = []
+    for item in items:
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+        if product:
+            result.append({
+                "product_id": product.id,
+                "name": product.name,
+                "price": product.price,
+                "image_url": product.image_url,
+                "quantity": item.quantity
+            })
+    return result
+
 
 
 def purchase_cart(db: Session, user_id: int):
