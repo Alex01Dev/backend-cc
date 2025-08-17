@@ -20,6 +20,8 @@ def get_db():
 async def create(
     name: str = Form(...),
     category: str = Form(...),
+    price: float = Form(...),
+    quantity: int = Form(...),
     carbon_footprint: float = Form(...),
     recyclable_packaging: bool = Form(...),
     local_origin: bool = Form(...),
@@ -33,13 +35,17 @@ async def create(
     product_data = {
         "name": name,
         "category": category,
+        "price": price,
+        "quantity": quantity,
         "carbon_footprint": carbon_footprint,
         "recyclable_packaging": recyclable_packaging,
         "local_origin": local_origin,
-        "image_url": image_url
+        "image_url": image_url,
+        "created_by": current_user.id
     }
     
-    return productController.create_product(db, product_data)
+    return productController.create_product(db, product_data) 
+
 
 
 @product_router.get("/get", response_model=list[Product])

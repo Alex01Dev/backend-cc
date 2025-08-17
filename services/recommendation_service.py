@@ -6,9 +6,17 @@ import asyncio
 import json
 
 def get_best_recommendation(db: Session, user_id: int):
-    recomendaciones = entrenar_recomendaciones(db, user_id)
-    if recomendaciones:
-        return recomendaciones[0]  # Mejor recomendación
+    resultados = entrenar_recomendaciones(db, user_id)
+
+    # Si tu entrenar_recomendaciones devuelve un dict con varias claves
+    # (ej: silhouette_score, clusters, recomendaciones), usamos solo "recomendaciones"
+    if isinstance(resultados, dict) and "recomendaciones" in resultados:
+        recomendaciones = resultados["recomendaciones"]
+    else:
+        recomendaciones = resultados  # lista simple como antes
+
+    if recomendaciones and len(recomendaciones) > 0:
+        return recomendaciones[0]  # el mejor producto (primero de la lista)
     return None
 
 

@@ -110,12 +110,12 @@ class Seeder:
             image_url=f"https://res.cloudinary.com/ecoapp/image/{categoria.lower()}/{random.randint(1,50)}.jpg"[:500]
         )
 
-    def run(self, total_records=10000):
+    def run(self, total_records=1000):
         try:
-            num_users = 1500   # 15%
-            num_products = 1500 # 15%
-            num_comments = 3000 # 30%
-            num_interactions = 4000 # 40%
+            num_users = 150   # 15%
+            num_products = 150 # 15%
+            num_comments = 300 # 30%
+            num_interactions = 400 # 40%
 
             # 1. Usuarios
             print(f"🔹 Creando {num_users} usuarios...")

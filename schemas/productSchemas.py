@@ -11,19 +11,26 @@ class CategoriaProducto(str, Enum):
     papeleria = "Papeleria"
     otros = "Otros"
 
+class StatusProducto(str, Enum):
+    disponible = "disponible"
+    agotado = "agotado"
+
 class ProductBase(BaseModel):
     name: str
     category: CategoriaProducto
     carbon_footprint: float
     recyclable_packaging: bool
     local_origin: bool
+    price: float
+    quantity: int = 1
+    status: StatusProducto = StatusProducto.disponible
 
 class ProductCreate(ProductBase):
-    pass  # no lleva imagen porque se sube aparte
+    pass
 
 class Product(ProductBase):
     id: int
-    image_url: HttpUrl | None = None  # NUEVO
+    image_url: HttpUrl | None = None
 
     class Config:
         from_attributes = True
