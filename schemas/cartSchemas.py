@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 class CartBase(BaseModel):
     product_id: int
@@ -7,9 +7,13 @@ class CartBase(BaseModel):
 class CartCreate(CartBase):
     pass
 
-class Cart(CartBase):
-    id: int
-    user_id: int
+# Este schema es para la respuesta del carrito con datos de producto
+class CartItemResponse(BaseModel):
+    product_id: int
+    name: str
+    price: float
+    image_url: HttpUrl | None
+    quantity: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
