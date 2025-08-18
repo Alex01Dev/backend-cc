@@ -39,7 +39,19 @@ def get_cart(db: Session, user_id: int):
             })
     return result
 
+def remove_from_cart(db: Session, user_id: int, product_id: int):
+    cart_item = db.query(Cart).filter(
+        Cart.user_id == user_id,
+        Cart.product_id == product_id
+    ).first()
 
+    if not cart_item:
+        return {"message": "El producto no está en el carrito"}
+
+    db.delete(cart_item)
+    db.commit()
+
+    return {"message": f"Producto {product_id} eliminado del carrito"}
 
 def purchase_cart(db: Session, user_id: int):
     items = db.query(Cart).filter(Cart.user_id == user_id).all()
