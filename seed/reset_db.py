@@ -16,7 +16,8 @@ class DatabaseResetter:
                 "tbd_comments",
                 "tbd_interactions",
                 "tbb_products",
-                "tbb_users"
+                "tbb_users",
+                "tbd_cart"  # Nueva tabla agregada
             ]
 
             for table in tables:
@@ -39,3 +40,4 @@ class DatabaseResetter:
             raise
         finally:
             self.db.close()
+
