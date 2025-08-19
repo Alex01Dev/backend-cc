@@ -120,13 +120,13 @@ class Seeder:
             created_by=random.choice(user_ids),
         )
 
-    def run(self, total_records=1000):
+    def run(self, total_records=1000000):
         try:
-            num_users = 150
-            num_products = 150
-            num_comments = 300
-            num_interactions = 400
-            num_carts = 200
+            num_users = 150000
+            num_products = 150000
+            num_comments = 300000
+            num_interactions = 400000
+            num_carts = 200000
 
             # 1. Usuarios
             print(f"🔹 Creando {num_users} usuarios...")
@@ -180,11 +180,54 @@ class Seeder:
             # 3. Comentarios
             print(f"\n🔹 Creando {num_comments} comentarios...")
             opiniones = [
-                "Muy buen producto, lo recomiendo",
-                "No cumplió con mis expectativas",
-                "Calidad excelente para el precio",
-                "El envío llegó tarde pero el producto es bueno",
-                "Totalmente ecológico como se describe",
+            "Excelente producto, muy recomendable.",
+            "Me encantó, volvería a comprarlo.",
+            "Buena relación calidad-precio.",
+            "No era lo que esperaba, pero funciona.",
+            "Empaque ecológico, muy bien.",
+            "Lo recibí a tiempo y en buen estado.",
+            "Podría mejorar, pero cumple su función.",
+            "Estoy satisfecho con la compra.",
+            "Muy útil para reducir mi consumo de plástico.",
+            "El empaque es completamente reciclable, me encanta.",
+            "Buena iniciativa, excelente para el planeta.",
+            "Materiales de muy buena calidad y ecológicos.",
+            "Me gusta apoyar marcas conscientes.",
+            "Funciona igual que uno convencional pero sin dañar el ambiente.",
+            "Ideal para regalar a alguien que se preocupa por el medio ambiente.",
+            "Producto natural, sin químicos innecesarios.",
+            "Muy buena opción para quienes buscan alternativas sustentables.",
+            "Recomiendo 100%, vale la pena cambiar a esto.",
+            "Perfecto para quienes buscan alternativas sostenibles.",
+            "El producto llegó en empaques reciclables, muy bien.",
+            "Increíble lo cómodo y ecológico que es.",
+            "Cumple su función sin generar residuos.",
+            "Una excelente forma de aportar al medio ambiente.",
+            "Ya es parte de mi día a día, muy útil.",
+            "Lo volvería a comprar sin dudarlo.",
+            "Es suave, duradero y sobre todo ecológico.",
+            "Me ayudó a reducir mi basura en casa.",
+            "Ideal para hogares sostenibles.",
+            "Ayuda a reducir la huella de carbono.",
+            "Fácil de usar y muy eficiente.",
+            "Recomendado para familias que reciclan.",
+            "Un producto responsable con el planeta.",
+            "Me encanta su diseño natural.",
+            "No pensé que funcionara tan bien siendo ecológico.",
+            "Definitivamente voy a seguir comprando esta marca.",
+            "Aporta a mi estilo de vida consciente.",
+            "Funciona mejor que muchos productos industriales.",
+            "Me sorprendió la calidad y su impacto positivo.",
+            "Mis hijos también lo usan, es muy seguro.",
+            "Una gran inversión para el futuro.",
+            "Se siente bien saber que consumo responsablemente.",
+            "Sustituí el producto anterior por este y no me arrepiento.",
+            "Lo uso todos los días y no se desgasta.",
+            "Gran relación calidad-precio y eco-friendly.",
+            "La textura natural es increíble.",
+            "Mis amigos también lo compraron tras probarlo.",
+            "Huele delicioso y es 100% natural.",
+            "Nunca había encontrado algo tan ecológico y útil."
             ]
             for i in range(0, num_comments, self.batch_size):
                 batch = [
