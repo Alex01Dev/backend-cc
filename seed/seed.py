@@ -115,7 +115,7 @@ class Seeder:
             carbon_footprint=carbon_footprint,
             recyclable_packaging=random.random() > 0.3,
             local_origin=random.random() > 0.6,
-            image_url=f"https://res.cloudinary.com/ecoapp/image/{categoria.lower()}/{random.randint(1,50)}.jpg"[:500],
+            image_url=f"https://res.cloudinary.com/dkerhtvlk/image/upload/v1753410633/productDefault_bddwkj.jpg{categoria.lower()}/{random.randint(1,50)}.jpg"[:500],
             price=round(random.uniform(5.0, 200.0), 2),
             quantity=random.randint(1, 100),
             status=status,
