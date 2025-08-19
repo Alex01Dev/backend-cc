@@ -20,4 +20,6 @@ class Product(Base):
 
     created_by = Column(Integer, ForeignKey("tbb_users.id"))  
     creator = relationship("User", back_populates="products")
+    purchases = relationship("Purchase", back_populates="product")
+
 
