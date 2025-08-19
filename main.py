@@ -10,6 +10,7 @@ from routes.commentsRoutes import comment_router
 from routes.notification_routes import notification_routes
 from routes.cartRoutes import cart_router
 from routes.transaccionRoutes import transaction_router
+from routes.mlsRoutes import ml_super
 
 from seed.seed import Seeder
 from seed.reset_db import DatabaseResetter
@@ -42,6 +43,7 @@ app.include_router(comment_router)
 app.include_router(notification_routes)
 app.include_router(cart_router)
 app.include_router(transaction_router)
+app.include_router(ml_super)
 
 # @app.on_event("startup")
 # def startup_event():

@@ -40,6 +40,12 @@ def remove_from_cart_route(product_id: int, db: Session = Depends(get_db), curre
 @cart_router.post("/purchase")
 def purchase_cart_route(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     result = cartController.purchase_cart(db, current_user.id)
-    if not result["purchased"]:
+
+    # Si realmente no hubo nada en purchased ni en skipped, entonces sí devolvemos error
+    if not result["purchased"] and not result["skipped"]:
         raise HTTPException(status_code=400, detail="No products available for purchase")
-    return {"message": "Purchase successful", "products": result["purchased"], "skipped": result["skipped"]}
+
+    return {
+        "message": "Purchase completed",
+        "products": result
+    }

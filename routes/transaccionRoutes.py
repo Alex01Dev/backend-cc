@@ -4,6 +4,8 @@ from config.db import get_db
 from models.productsModel import Product
 from models.usersModel import User
 from config.jwt import get_current_user
+from schemas.transactionSchemas import BuyRequest
+
 
 transaction_router = APIRouter(
     prefix="/transactions",
@@ -12,25 +14,21 @@ transaction_router = APIRouter(
 
 @transaction_router.post("/buy")
 def buy_product(
-    product_id: int,
-    quantity: int,
+    data: BuyRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = db.query(Product).filter(Product.id == data.product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
-    # No permitir comprar si el producto lo creó el mismo usuario
     if product.created_by == current_user.id:
         raise HTTPException(status_code=400, detail="No puedes comprar tus propios productos")
 
-    # Validar stock
-    if product.quantity < quantity:
+    if product.quantity < data.quantity:
         raise HTTPException(status_code=400, detail="No hay suficiente stock disponible")
 
-    # Reducir stock
-    product.quantity -= quantity
+    product.quantity -= data.quantity
     if product.quantity == 0:
         product.status = "agotado"
 

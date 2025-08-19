@@ -7,7 +7,8 @@ from services.training import entrenar_recomendaciones
 
 training_router = APIRouter(prefix="/modelo", tags=["Modelo"])
 
-@training_router.post("/entrenar")
+# Ruta GET protegida con JWT
+@training_router.get("/entrenar")
 def entrenar_modelo(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
