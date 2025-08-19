@@ -9,7 +9,7 @@ class CategoriaProducto(str, Enum):
     hogar = "Hogar"
     salud = "Salud"
     papeleria = "Papeleria"
-    otros = "Otros"
+    otro = "Otro"
 
 class StatusProducto(str, Enum):
     disponible = "disponible"
