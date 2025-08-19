@@ -67,16 +67,42 @@ def read_one(
     return db_product
 
 @product_router.put("/{product_id}", response_model=Product)
-def update(
-    product_id: int, 
-    updates: ProductCreate, 
+async def update(
+    product_id: int,
+    name: str = Form(...),
+    category: str = Form(...),
+    price: float = Form(...),
+    quantity: int = Form(...),  # <-- aquí
+    carbon_footprint: float = Form(...),
+    recyclable_packaging: bool = Form(...),
+    local_origin: bool = Form(...),
+    status: str = Form(...),
+    image: UploadFile = File(None),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)  # Protección JWT
+    current_user: User = Depends(get_current_user)
 ):
-    updated = productController.update_product(db, product_id, updates)
-    if updated is None:
+    from services.cloudinary import upload_image, DEFAULT_IMAGE
+    image_url = upload_image(image) if image else DEFAULT_IMAGE
+
+    product_data = {
+        "name": name,
+        "category": category,
+        "price": price,
+        "quantity": quantity,  # <-- aquí también
+        "carbon_footprint": carbon_footprint,
+        "recyclable_packaging": recyclable_packaging,
+        "local_origin": local_origin,
+        "status": status,
+        "image_url": image_url
+    }
+
+    updated_product = productController.update_product(db, product_id, product_data)
+    if updated_product is None:
+        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Product not found")
-    return updated
+    return updated_product
+
+
 
 @product_router.delete("/{product_id}")
 def delete(

@@ -100,3 +100,40 @@ def get_active_users_list(db: Session = Depends(get_db)):
     if not users:
         raise HTTPException(status_code=404, detail="No users found")
     return [{"id": u.id, "username": u.username, "status": u.status} for u in users]
+
+
+@user.put("/users/{user_id}", response_model=User, tags=["Users"])
+async def update_user(
+    user_id: int,
+    username: str = Form(...),
+    email: str = Form(...),
+    status: str = Form(...),
+    profile_picture: UploadFile = File(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    from services.cloudinary import upload_image, DEFAULT_IMAGE
+    
+    db_user = get_user_by_id(db, user_id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Subir nueva imagen si existe, sino mantener la anterior
+    image_url = upload_image(profile_picture, default_type="user") if profile_picture else db_user.profile_picture
+
+    updates = {
+        "username": username,
+        "email": email,
+        "status": status,
+        "profile_picture": image_url
+    }
+
+    try:
+        for field, value in updates.items():
+            setattr(db_user, field, value)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error updating user: {str(e)}")

@@ -34,21 +34,25 @@ def get_product(db: Session, product_id: int):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
-def update_product(db: Session, product_id: int, updates: ProductCreate):
+def update_product(db: Session, product_id: int, updates: dict):
     try:
         db_product = db.query(Product).filter(Product.id == product_id).first()
         if not db_product:
+            from fastapi import HTTPException
             raise HTTPException(status_code=404, detail="Product not found")
 
-        for field, value in updates.model_dump().items():
+        # Actualizar campos usando dict
+        for field, value in updates.items():
             setattr(db_product, field, value)
 
         db.commit()
         db.refresh(db_product)
         return db_product
-    except SQLAlchemyError as e:
+    except Exception as e:
         db.rollback()
+        from fastapi import HTTPException
         raise HTTPException(status_code=500, detail=f"Error updating product: {str(e)}")
+
 
 def delete_product(db: Session, product_id: int):
     try:
