@@ -17,3 +17,4 @@ class User(Base):
     update_date = Column(DateTime, nullable=True)
 
     products = relationship("Product", back_populates="creator")
+    purchases = relationship("Purchase", back_populates="user")

@@ -43,18 +43,18 @@ app.include_router(notification_routes)
 app.include_router(cart_router)
 app.include_router(transaction_router)
 
-@app.on_event("startup")
-def startup_event():
-    # Configuración
-    run_reset = True   # Cambia a True para limpiar la base de datos  
-    run_seeder = True  # Cambia a True para ejecutar el seeder
+# @app.on_event("startup")
+# def startup_event():
+#     # Configuración
+#     run_reset = True   # Cambia a True para limpiar la base de datos  
+#     run_seeder = True  # Cambia a True para ejecutar el seeder
 
-    if run_reset:
-        print("Reiniciando base de datos...")
-        resetter = DatabaseResetter()
-        resetter.reset()
+#     if run_reset:
+#         print("Reiniciando base de datos...")
+#         resetter = DatabaseResetter()
+#         resetter.reset()
 
-    if run_seeder:
-        print("Ejecutando seeder...")
-        seeder = Seeder()
-        seeder.run()
+#     if run_seeder:
+#         print("Ejecutando seeder...")
+#         seeder = Seeder()
+#         seeder.run()
