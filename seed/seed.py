@@ -10,6 +10,8 @@ from models.interactionModel import Interaccion
 from models.commentModel import Comment
 from models.cartModel import Cart
 from schemas.productSchemas import StatusProducto
+from models.purchaseModel import Purchase
+from sqlalchemy.orm import joinedload
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -120,13 +122,14 @@ class Seeder:
             created_by=random.choice(user_ids),
         )
 
-    def run(self, total_records=1000000):
+    def run(self, total_records=1240):
         try:
-            num_users = 150000
-            num_products = 150000
-            num_comments = 300000
-            num_interactions = 400000
-            num_carts = 200000
+            num_users = 150
+            num_products = 190
+            num_comments = 90
+            num_interactions = 500
+            num_carts = 200
+            num_purchases = 110
 
             # 1. Usuarios
             print(f"🔹 Creando {num_users} usuarios...")
@@ -282,10 +285,42 @@ class Seeder:
                 self.db.bulk_save_objects(batch)
                 self.db.commit()
                 print(f"✅ Carritos {i+1}-{i+len(batch)} creados")
+                
+            # 6. Purcharse
+            print(f"\n🔹 Creando compras desde carritos...")
+            
+            # Trae todos los carritos ya creados
+            carts = self.db.query(Cart).options(joinedload(Cart.product)).all()
+            random.shuffle(carts)
+            purchases_batch = []
+            
+            existing_purchases = set(
+                (p.user_id, p.product_id) for p in self.db.query(Purchase.user_id, Purchase.product_id).all()
+            )
+
+            for cart in carts[:num_purchases]:
+                key = (cart.user_id, cart.product_id)
+                
+                if key not in existing_purchases and cart.product:
+                    purchase = Purchase(
+                        user_id=cart.user_id,
+                        product_id=cart.product_id,
+                        quantity=cart.quantity,
+                        total_price=cart.quantity * cart.product.price,
+                )
+                purchases_batch.append(purchase)
+                existing_purchases.add(key)  # Marcar como creada
+                self.db.delete(cart)
+                
+                self.db.add_all(purchases_batch)
+                self.db.commit()
+            
+            print(f"Compras creadas: {len(purchases_batch)}")
+            
 
             print(f"\n🎉 Seeder completado exitosamente!")
             print(
-                f"Total registros creados: {num_users + num_products + num_comments + num_interactions + num_carts}"
+                f"Total registros creados: {num_users + num_products + num_comments + num_interactions + num_carts + num_purchases}"
             )
 
         except Exception as e:
