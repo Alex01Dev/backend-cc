@@ -1,0 +1,6 @@
+id,name,category,price,quantity,status,carbon_footprint,recyclable_packaging,local_origin,text,cluster,carbon_score,price_score,sustentabilidad_score,score
+161,Taza de cera (Hecho a mano),Hogar,9.12,29,disponible,8.0,1,0,Hogar 1 0,0,0.8525627535844178,0.9910358566206969,0.6175209178614726,0.8834634466825813
+115,Tabla de cortar de cera (Hecho a mano),Hogar,109.37,92,disponible,9.2,1,1,Hogar 1 1,0,0.8272516383199402,0.46550639827266505,0.9424172127733135,0.875826443486527
+178,Taza de cera (Diseño circular),Hogar,23.95,11,disponible,10.44,1,0,Hogar 1 0,0,0.8010968192133132,0.9132941921089631,0.6003656064044377,0.8627685203431239
+91,Repisa de cera (Hecho a mano),Hogar,117.4,67,disponible,11.67,1,1,Hogar 1 1,0,0.7751529260672236,0.42341161971371544,0.9250509753557412,0.8621976165494655
+9,Tabla de cortar de plastico reciclado (Diseño circular),Hogar,119.5,48,disponible,13.04,1,1,Hogar 1 1,0,0.7462560694736118,0.41240302258123807,0.9154186898245372,0.8571062114636088

@@ -1,6 +1,6 @@
 id,name,category,price,quantity,status,carbon_footprint,recyclable_packaging,local_origin,text,cluster,carbon_score,price_score,sustentabilidad_score,score
-190,Desinfectante natural de Sin quimicos (Concentrado),Limpieza,70.5,92,disponible,3.43,1,1,Limpieza 1 1,1,0.9476295489226471,0.6646291367134316,0.9825431829742156,0.677688782234951
-104,Jabón de Sin quimicos (Zero waste),Limpieza,22.8,56,disponible,4.43,1,0,Limpieza 1 0,1,0.9292539520534003,0.9096466000120885,0.6430846506844667,0.6248547152077577
-75,Cepillo de madera de orgánico (Sin fragancia),Limpieza,35.91,10,disponible,3.62,1,0,Limpieza 1 0,1,0.9441381855174902,0.8423053223633382,0.6480460618391634,0.6128748830244166
-78,Limpiador multiusos de biodegradable (Concentrado),Limpieza,149.19,86,disponible,2.04,1,1,Limpieza 1 1,1,0.9731716285708999,0.26042737178740816,0.9910572095236333,0.5994026372145717
-43,Cepillo de madera de biodegradable (Concentrado),Limpieza,65.31,42,disponible,2.38,0,1,Limpieza 0 1,1,0.966923925635356,0.6912882695125936,0.6556413085451186,0.5849500464660543
+12,Agenda anual de tinta vegetal (Plantable),Papeleria,21.74,19,disponible,2.29,1,1,Papeleria 1 1,2,0.9633891221048301,0.9241236899072134,0.9877963740349434,0.7311636501919256
+41,Postales ilustradas de papel semilla (Plantable),Papeleria,41.79,47,disponible,4.42,1,1,Papeleria 1 1,2,0.9188284535809947,0.8179603949064895,0.9729428178603315,0.7054749243393974
+101,Sobre kraft de cartón reciclado (100% reciclado),Papeleria,63.39,74,disponible,3.21,1,1,Papeleria 1 1,2,0.9441422605827979,0.7035899623870064,0.9813807535275992,0.6851322185356812
+102,Bloc de notas de tinta vegetal (Plantable),Papeleria,72.86,19,disponible,2.86,1,1,Papeleria 1 1,2,0.9514644361618319,0.6534469996111034,0.9838214787206105,0.6758358435384039
+179,Carpeta archivador de cartón reciclado (Plantable),Papeleria,83.63,94,disponible,1.62,1,1,Papeleria 1 1,2,0.9774058582132665,0.5964206311743057,0.9924686194044222,0.6670247120561879
