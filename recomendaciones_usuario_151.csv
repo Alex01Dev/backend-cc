@@ -1,0 +1,6 @@
+id,name,category,price,quantity,status,carbon_footprint,recyclable_packaging,local_origin,text,cluster,carbon_score,price_score,sustentabilidad_score,score
+189,Power bank de plástico reciclado (Modular),Tecnologia,13.71,61,disponible,33.59,1,1,Tecnologia 1 1,0,0.2291275978159567,0.9682779457845716,0.7430425326053189,0.9165683489385099
+81,Cargador solar de plástico reciclado (Eficiencia A+),Tecnologia,14.36,35,disponible,16.53,1,0,Tecnologia 1 0,0,0.6292213970632881,0.9648921764512336,0.543073799021096,0.8559005749965755
+63,Fundas para móvil de plástico reciclado (Modular),Tecnologia,27.1,75,disponible,12.72,1,0,Tecnologia 1 0,0,0.7185741154180554,0.8985310975178087,0.5728580384726851,0.8515636310453674
+98,Power bank de metales reciclados (Modular),Tecnologia,105.3,76,disponible,32.92,1,1,Tecnologia 1 1,0,0.2448405430384487,0.4911970023377591,0.7482801810128162,0.8227234547713967
+72,Power bank de metales reciclados (Modular),Tecnologia,64.91,80,disponible,10.07,1,0,Tecnologia 1 0,0,0.7807223315965682,0.7015834998354855,0.5935741105321894,0.818388933126754

@@ -1,0 +1,6 @@
+id,name,category,price,quantity,status,carbon_footprint,recyclable_packaging,local_origin,text,cluster,carbon_score,price_score,sustentabilidad_score,score
+65,Lápices de colores de cartón reciclado (100% reciclado),Papeleria,59.8,61,disponible,1.6,1,1,Papeleria 1 1,2,0.9787535415064035,0.7190774618909108,0.9929178471688012,0.7541908465288224
+184,Postales ilustradas de papel semilla (Plantable),Papeleria,7.59,13,disponible,1.52,1,0,Papeleria 1 0,2,0.9803723192963918,0.9872611465622502,0.6601241064321306,0.7079894612420892
+72,Postales ilustradas de papel semilla (100% reciclado),Papeleria,109.1,81,disponible,3.3,1,1,Papeleria 1 1,2,0.9443545134691519,0.4658413834711249,0.9814515044897173,0.7001037280411402
+139,Sobre kraft de papel semilla (100% reciclado),Papeleria,61.5,30,disponible,5.36,1,0,Papeleria 1 0,2,0.9026709853769529,0.7103451833247114,0.6342236617923177,0.6448361352026376
+30,Bloc de notas de tinta vegetal (100% reciclado),Papeleria,173.24,61,disponible,1.55,1,1,Papeleria 1 1,2,0.9797652776251461,0.13637764980286793,0.9932550925417153,0.6377520577230882
