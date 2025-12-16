@@ -1,6 +1,6 @@
 id,name,category,price,quantity,status,carbon_footprint,recyclable_packaging,local_origin,text,cluster,carbon_score,price_score,sustentabilidad_score,score
-189,Power bank de plástico reciclado (Modular),Tecnologia,13.71,61,disponible,33.59,1,1,Tecnologia 1 1,0,0.2291275978159567,0.9682779457845716,0.7430425326053189,0.9165683489385099
-81,Cargador solar de plástico reciclado (Eficiencia A+),Tecnologia,14.36,35,disponible,16.53,1,0,Tecnologia 1 0,0,0.6292213970632881,0.9648921764512336,0.543073799021096,0.8559005749965755
-63,Fundas para móvil de plástico reciclado (Modular),Tecnologia,27.1,75,disponible,12.72,1,0,Tecnologia 1 0,0,0.7185741154180554,0.8985310975178087,0.5728580384726851,0.8515636310453674
-98,Power bank de metales reciclados (Modular),Tecnologia,105.3,76,disponible,32.92,1,1,Tecnologia 1 1,0,0.2448405430384487,0.4911970023377591,0.7482801810128162,0.8227234547713967
-72,Power bank de metales reciclados (Modular),Tecnologia,64.91,80,disponible,10.07,1,0,Tecnologia 1 0,0,0.7807223315965682,0.7015834998354855,0.5935741105321894,0.818388933126754
+67,Galletas de avena de vegano (Pack familiar),Alimentos,5.36,38,disponible,2.53,1,1,Alimentos 1 1,4,0.957971015362919,1.0,0.9859903384543064,0.9957971015362919
+171,Pasta de trigo duro de vegano (Pack familiar),Alimentos,9.01,73,disponible,2.65,1,1,Alimentos 1 1,4,0.9554865433646679,0.9812107485781388,0.985162181121556,0.9917908040520945
+97,Pan integral de vegano (Pack familiar),Alimentos,6.6,11,disponible,4.76,1,1,Alimentos 1 1,4,0.9118012440620861,0.9936168022566828,0.970600414687362,0.9899034848575452
+19,Café de orgánico (Pack familiar),Alimentos,20.32,52,disponible,3.31,1,1,Alimentos 1 1,4,0.9418219473742868,0.9229898078709471,0.9806073157914289,0.9787801563116181
+26,Quinoa de orgánico (Energético),Alimentos,35.69,100,disponible,1.83,1,1,Alimentos 1 1,4,0.9724637686860503,0.8438690422945072,0.9908212562286834,0.9660201853275064
