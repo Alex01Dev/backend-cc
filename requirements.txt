@@ -32,3 +32,4 @@ python-multipart
 python-dotenv
 websockets
 faker
+gunicorn
