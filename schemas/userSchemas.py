@@ -17,7 +17,7 @@ class User(BaseModel):
     email: EmailStr
     status: str
     registration_date: datetime
-    profile_picture: str  # Campo obligatorio en respuesta
+    profile_picture: Optional[str]= None  # Campo obligatorio en respuesta
 
     class Config:
         from_attributes = True  # Para trabajar con ORM

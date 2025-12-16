@@ -137,3 +137,4 @@ async def update_user(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error updating user: {str(e)}")
+
